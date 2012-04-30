@@ -1,0 +1,1 @@
+INSERT INTO core_dashboard(dashboard_name, dashboard_column, dashboard_order) VALUES('DISCONNECTION_SCRIPT', 4, 10);
