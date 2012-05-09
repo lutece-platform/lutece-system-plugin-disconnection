@@ -30,6 +30,7 @@ DisconnectionMonitor = (function () {
     	self = self || this;
    	
     	jQuery.ajax( {
+    		cache: false,
 			url :"jsp/admin/plugins/disconnection/ConnectionState.jsp",
 			success : function(data) {
 				if(data.isConnected) {
