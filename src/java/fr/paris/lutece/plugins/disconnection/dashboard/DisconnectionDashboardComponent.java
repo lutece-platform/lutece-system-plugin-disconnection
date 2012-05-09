@@ -35,7 +35,11 @@ package fr.paris.lutece.plugins.disconnection.dashboard;
 
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.dashboard.DashboardComponent;
-import fr.paris.lutece.portal.service.i18n.I18nService;
+import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppPropertiesService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,6 +50,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class DisconnectionDashboardComponent extends DashboardComponent
 {
+    private static final String TEMPLATE_DISCONNECTION_DASHBOARD = "admin/plugins/disconnection/disconnection_dashboard.html";
+    private static final String PROPERTY_TIMEOUT = "timeout";
+    private static final String MODEL_TIMEOUT = "timeout";
+
     /*
      * (non-Javadoc)
      * 
@@ -57,30 +65,11 @@ public class DisconnectionDashboardComponent extends DashboardComponent
     @Override
     public String getDashboardData( AdminUser user, HttpServletRequest request )
     {
-        String message = I18nService.getLocalizedString( "disconnection.message", request.getLocale( ) );
+        Integer timeout = AppPropertiesService.getPropertyInt( PROPERTY_TIMEOUT, 2 );
 
-        Integer timeout;
-        try
-        {
-            timeout = Integer
-                    .parseInt( I18nService.getLocalizedString( "disconnection.timeout", request.getLocale( ) ) );
-
-        }
-        catch ( NumberFormatException e )
-        {
-            timeout = 1;
-        }
-
-        StringBuilder stringBuilder = new StringBuilder( );
-        stringBuilder.append( "<script type='text/javascript' src='" );
-        stringBuilder.append( request.getContextPath( ) );
-        stringBuilder
-                .append( "/js/plugins/disconnection/disconnection.js'></script><script type='text/javascript'>new DisconnectionMonitor('" );
-        stringBuilder.append( message );
-        stringBuilder.append( "', " );
-        stringBuilder.append( timeout );
-        stringBuilder.append( ").check();</script>" );
-
-        return stringBuilder.toString( );
+        Map<String, Object> model = new HashMap<String, Object>( );
+        model.put( MODEL_TIMEOUT, timeout );
+        return AppTemplateService.getTemplate( TEMPLATE_DISCONNECTION_DASHBOARD,
+                request.getLocale( ), model ).getHtml( );
     }
 }
