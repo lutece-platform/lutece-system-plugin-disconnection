@@ -36,6 +36,7 @@ package fr.paris.lutece.plugins.disconnection.dashboard;
 import fr.paris.lutece.portal.business.user.AdminUser;
 import fr.paris.lutece.portal.service.dashboard.DashboardComponent;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 
 import java.util.HashMap;
@@ -50,6 +51,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class DisconnectionDashboardComponent extends DashboardComponent
 {
+    private static final String MODEL_WEBAPP_ROOT = "webappRoot";
     private static final String TEMPLATE_DISCONNECTION_DASHBOARD = "admin/plugins/disconnection/disconnection_dashboard.html";
     private static final String PROPERTY_TIMEOUT = "timeout";
     private static final String MODEL_TIMEOUT = "timeout";
@@ -67,8 +69,10 @@ public class DisconnectionDashboardComponent extends DashboardComponent
     {
         Integer timeout = AppPropertiesService.getPropertyInt( PROPERTY_TIMEOUT, 2 );
 
+
         Map<String, Object> model = new HashMap<String, Object>( );
         model.put( MODEL_TIMEOUT, timeout );
+        model.put( MODEL_WEBAPP_ROOT, AppPathService.getBaseUrl( request ) );
         return AppTemplateService.getTemplate( TEMPLATE_DISCONNECTION_DASHBOARD,
                 request.getLocale( ), model ).getHtml( );
     }
